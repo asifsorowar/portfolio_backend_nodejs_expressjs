@@ -2,33 +2,54 @@ const mongoose = require("mongoose");
 const { Schema } = require("mongoose");
 const Joi = require("@hapi/joi");
 
-const my_infoSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
+const my_infoSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+      minlength: 11,
+      trim: true,
+    },
+    address: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+      required: true,
+      minlength: 5,
+      trim: true,
+    },
+    about: {
+      type: String,
+      minlength: 10,
+      trim: true,
+    },
+    resumeAbout: {
+      type: String,
+      minlength: 10,
+      trim: true,
+    },
+    photo: {
+      type: Object,
+    },
+    cv: {
+      type: Object,
+    },
   },
-  email: {
-    type: String,
-    required: true,
-  },
-  phone: {
-    type: String,
-    required: true,
-    minlength: 11,
-  },
-  address: {
-    type: String,
-    required: true,
-  },
-  photo: {
-    type: Object,
-  },
-  cv: {
-    type: Object,
-  },
-  created: { type: Date, default: Date.now },
-  edited: { type: Date },
-});
+  { timestamps: true }
+);
 
 const My_Info = mongoose.model("My_Info", my_infoSchema);
 
@@ -44,6 +65,9 @@ const validate = (info) => {
       .regex(/^[0-9]+$/)
       .required(),
     address: Joi.string().required(),
+    description: Joi.string().required().min(5),
+    about: Joi.string().min(10),
+    resumeAbout: Joi.string().min(10).trim(),
   });
 
   return schema.validate(info);
