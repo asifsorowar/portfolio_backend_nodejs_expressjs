@@ -3,7 +3,7 @@ const Joi = require("@hapi/joi");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-const adminSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -24,7 +24,7 @@ const adminSchema = new mongoose.Schema({
   created: { type: Date, default: Date.now },
 });
 
-adminSchema.methods.getJwtToken = function () {
+userSchema.methods.getJwtToken = function () {
   const token = jwt.sign(
     {
       _id: this._id,
@@ -41,7 +41,7 @@ adminSchema.methods.getJwtToken = function () {
   return token;
 };
 
-adminSchema.pre("save", async function (next) {
+userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
   const salt = await bcrypt.genSalt(10);
@@ -49,9 +49,9 @@ adminSchema.pre("save", async function (next) {
   return next();
 });
 
-const Admin = mongoose.model("Admin", adminSchema);
+const User = mongoose.model("Admin", userSchema);
 
-const validate = (admin) => {
+const validate = (user) => {
   const schema = Joi.object({
     name: Joi.string()
       .required()
@@ -67,8 +67,8 @@ const validate = (admin) => {
     password: Joi.string().required().min(8),
   });
 
-  return schema.validate(admin);
+  return schema.validate(user);
 };
 
-module.exports.Admin = Admin;
+module.exports.User = User;
 module.exports.validate = validate;
