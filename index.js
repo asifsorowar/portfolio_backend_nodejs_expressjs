@@ -20,6 +20,8 @@ const skillLabels = require("./router/skillLabels");
 const skillLevels = require("./router/skillLevels");
 const skills = require("./router/skills");
 const projectCategories = require("./router/projectCategories");
+const stacks = require("./router/stacks");
+const projects = require("./router/projects");
 
 app.use(express.json());
 app.use(express.static("public"));
@@ -33,6 +35,8 @@ app.use("/api/skill_labels", skillLabels);
 app.use("/api/skill_levels", skillLevels);
 app.use("/api/skills", skills);
 app.use("/api/categories", projectCategories);
+app.use("/api/stacks", stacks);
+app.use("/api/projects", projects);
 app.use(error);
 
 mongoose

@@ -56,7 +56,7 @@ router.put("/photo", auth, async (req, res) => {
   await file.mv(filePath);
   const my_info = await My_Info.findOneAndUpdate(
     {},
-    { photo: file.name, edited: Date.now() },
+    { photo: file.name },
     { new: true }
   );
   return res.status(200).send(my_info);
@@ -85,7 +85,7 @@ router.put("/cv", auth, async (req, res) => {
   await file.mv(filePath);
   const my_info = await My_Info.findOneAndUpdate(
     {},
-    { cv: file.name, edited: Date.now() },
+    { cv: file.name },
     { new: true }
   );
   return res.status(200).send(my_info);
