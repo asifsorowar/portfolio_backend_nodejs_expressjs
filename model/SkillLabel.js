@@ -17,6 +17,11 @@ const skillLabelSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+skillLabelSchema.pre("remove", async function (next) {
+  await this.model("Skill").deleteMany({ label: this._id });
+  return next();
+});
+
 const SkillLabel = mongoose.model("SkillLabel", skillLabelSchema);
 
 const validate = (skillLabel) => {

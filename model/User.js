@@ -49,7 +49,7 @@ userSchema.pre("save", async function (next) {
   return next();
 });
 
-const User = mongoose.model("Admin", userSchema);
+const User = mongoose.model("User", userSchema);
 
 const validate = (user) => {
   const schema = Joi.object({

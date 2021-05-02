@@ -17,7 +17,7 @@ router.post("/", auth, async (req, res) => {
   if (label) return res.status(400).send(`${req.body.label} already existed!`);
 
   label = new SkillLabel(req.body);
-  label.save();
+  await label.save();
 
   return res.status(200).send(label);
 });
@@ -33,9 +33,10 @@ router.put("/:_id", [auth, isValidId], async (req, res) => {
 });
 
 router.delete("/:_id", [auth, isValidId], async (req, res) => {
-  const label = await SkillLabel.findByIdAndDelete(req.params._id);
-  if (!label) res.status(400).send("already deleted!");
+  const label = await SkillLabel.findOne({ _id: req.params._id });
+  if (!label) return res.status(400).send("already deleted!");
 
+  await label.remove();
   return res.status(200).send(label);
 });
 

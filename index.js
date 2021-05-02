@@ -5,6 +5,9 @@ require("colors");
 const mongoose = require("mongoose");
 const fileUpload = require("express-fileupload");
 
+const Joi = require("@hapi/joi");
+Joi.objectId = require("joi-objectid")(Joi);
+
 const error = require("./middleware/error.js");
 const app = express();
 
@@ -14,6 +17,9 @@ const my_infos = require("./router/my_infos.js");
 const educations = require("./router/educations");
 const employments = require("./router/employments");
 const skillLabels = require("./router/skillLabels");
+const skillLevels = require("./router/skillLevels");
+const skills = require("./router/skills");
+const projectCategories = require("./router/projectCategories");
 
 app.use(express.json());
 app.use(express.static("public"));
@@ -24,6 +30,9 @@ app.use("/api/my_info", my_infos);
 app.use("/api/educations", educations);
 app.use("/api/employments", employments);
 app.use("/api/skill_labels", skillLabels);
+app.use("/api/skill_levels", skillLevels);
+app.use("/api/skills", skills);
+app.use("/api/categories", projectCategories);
 app.use(error);
 
 mongoose
