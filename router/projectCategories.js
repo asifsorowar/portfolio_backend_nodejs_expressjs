@@ -14,7 +14,11 @@ router.post("/", [auth, admin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const category = new ProjectCategory(req.body);
+  let category = await ProjectCategory.findOne({ name: req.body.name });
+  if (category)
+    return res.status(400).send(`${req.body.name} already existed!`);
+
+  category = new ProjectCategory(req.body);
   await category.save();
 
   return res.status(200).send(category);

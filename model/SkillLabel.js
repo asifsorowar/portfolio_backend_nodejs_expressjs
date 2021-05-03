@@ -6,6 +6,7 @@ const skillLabelSchema = new mongoose.Schema(
     id: {
       type: Number,
       required: true,
+      index: true,
       indexes: { unique: true },
     },
     label: {
@@ -23,6 +24,9 @@ skillLabelSchema.pre("remove", async function (next) {
 });
 
 const SkillLabel = mongoose.model("SkillLabel", skillLabelSchema);
+
+index = async () => await SkillLabel.createIndexes();
+index();
 
 const validate = (skillLabel) => {
   const schema = Joi.object({
