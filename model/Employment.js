@@ -6,7 +6,7 @@ const employmentSchema = new mongoose.Schema(
     id: {
       type: Number,
       required: true,
-      indexes: { unique: true },
+      index: { unique: true },
     },
     institute: {
       type: String,

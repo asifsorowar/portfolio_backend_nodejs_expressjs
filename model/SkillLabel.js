@@ -6,8 +6,7 @@ const skillLabelSchema = new mongoose.Schema(
     id: {
       type: Number,
       required: true,
-      index: true,
-      indexes: { unique: true },
+      index: { unique: true },
     },
     label: {
       type: String,
