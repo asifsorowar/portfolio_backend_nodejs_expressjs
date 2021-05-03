@@ -6,13 +6,14 @@ const { SkillLevel } = require("../model/SkillLevel");
 const auth = require("../middleware/auth");
 const isValidId = require("../middleware/isMongooseId");
 const mongoose = require("mongoose");
+const admin = require("../middleware/admin");
 
 router.get("/", async (req, res) => {
   const skills = await Skill.find({}).populate(["label", "level"]);
   return res.status(200).send(skills);
 });
 
-router.post("/", [auth], async (req, res) => {
+router.post("/", [auth, admin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -30,7 +31,7 @@ router.post("/", [auth], async (req, res) => {
   return res.status(200).send(skill);
 });
 
-router.put("/:_id", [auth, isValidId], async (req, res, next) => {
+router.put("/:_id", [auth, admin, isValidId], async (req, res, next) => {
   if (req.body.level) {
     if (!validMongooseId(req.body.level))
       return res.status(400).send("not valid level id!");
@@ -53,7 +54,7 @@ router.put("/:_id", [auth, isValidId], async (req, res, next) => {
   return res.status(200).send(skill);
 });
 
-router.delete("/:_id", [auth, isValidId], async (req, res) => {
+router.delete("/:_id", [auth, admin, isValidId], async (req, res) => {
   const skill = await Skill.findByIdAndDelete(req.params._id);
   if (!skill) return res.status(400).send("already deleted!");
 

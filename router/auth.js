@@ -4,7 +4,7 @@ const { User } = require("../model/User");
 const bcrypt = require("bcrypt");
 const Joi = require("@hapi/joi");
 
-router.post("/login", async (req, res) => {
+router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 

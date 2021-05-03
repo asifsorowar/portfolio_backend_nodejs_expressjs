@@ -62,7 +62,7 @@ const validate = (info) => {
     email: Joi.string().email().required(),
     phone: Joi.string()
       .min(11)
-      .regex(/^[0-9]+$/)
+      .regex(/^(01)[0-9]{9}$/) //(?=expression)(?=expression) and operation // same: /^(01)[0-9]+$/
       .required(),
     address: Joi.string().required(),
     description: Joi.string().required().min(5),

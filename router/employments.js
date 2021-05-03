@@ -3,6 +3,7 @@ const router = express.Router();
 const { Employment, validate } = require("../model/Employment");
 const auth = require("../middleware/auth");
 const mongooseId = require("../middleware/isMongooseId");
+const admin = require("../middleware/admin");
 
 router.get("/", async (req, res) => {
   const employments = await Employment.find({}).sort({ id: -1 });
@@ -10,7 +11,7 @@ router.get("/", async (req, res) => {
   return res.status(200).send(employments);
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", [auth, admin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -28,7 +29,7 @@ router.post("/", auth, async (req, res) => {
   return res.status(200).send(employment);
 });
 
-router.put("/:_id", [auth, mongooseId], async (req, res) => {
+router.put("/:_id", [auth, admin, mongooseId], async (req, res) => {
   const employment = await Employment.findByIdAndUpdate(
     req.params._id,
     { ...req.body },
@@ -42,7 +43,7 @@ router.put("/:_id", [auth, mongooseId], async (req, res) => {
   return res.status(200).send(employment);
 });
 
-router.delete("/:_id", [auth, mongooseId], async (req, res) => {
+router.delete("/:_id", [auth, admin, mongooseId], async (req, res) => {
   const employment = await Employment.findByIdAndDelete(req.params._id);
   if (!employment) return res.status(200).send("Already deleted!");
 

@@ -3,13 +3,14 @@ const router = express.Router();
 const { Stack, validate } = require("../model/Stack");
 const auth = require("../middleware/auth");
 const isValidId = require("../middleware/isMongooseId");
+const admin = require("../middleware/admin");
 
-router.get("/", [auth], async (req, res) => {
+router.get("/", [auth, admin], async (req, res) => {
   const stacks = await Stack.find();
   return res.send(stacks);
 });
 
-router.post("/", [auth], async (req, res) => {
+router.post("/", [auth, admin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -22,7 +23,7 @@ router.post("/", [auth], async (req, res) => {
   return res.status(200).send(stack);
 });
 
-router.put("/:_id", [auth, isValidId], async (req, res) => {
+router.put("/:_id", [auth, admin, isValidId], async (req, res) => {
   const stack = await Stack.findByIdAndUpdate(req.params._id, req.body, {
     new: true,
     runValidators: true,
@@ -32,7 +33,7 @@ router.put("/:_id", [auth, isValidId], async (req, res) => {
   return res.status(200).send(stack);
 });
 
-router.delete("/:_id", [auth, isValidId], async (req, res) => {
+router.delete("/:_id", [auth, admin, isValidId], async (req, res) => {
   const stack = await Stack.findById(req.params._id);
   if (!stack) return res.status(400).send("already deleted!");
   await stack.remove();

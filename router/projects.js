@@ -6,6 +6,7 @@ const { Stack } = require("../model/Stack");
 const mongoose = require("mongoose");
 const auth = require("../middleware/auth");
 const isMongooseId = require("../middleware/isMongooseId");
+const admin = require("../middleware/admin");
 const fs = require("fs");
 const path = require("path");
 
@@ -14,7 +15,7 @@ router.get("/", async (req, res) => {
   return res.send(projects);
 });
 
-router.post("/", [auth], async (req, res) => {
+router.post("/", [auth, admin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -42,7 +43,7 @@ router.post("/", [auth], async (req, res) => {
   return res.status(200).send(project);
 });
 
-router.put("/:_id/photo", [auth, isMongooseId], async (req, res) => {
+router.put("/:_id/photo", [auth, admin, isMongooseId], async (req, res) => {
   let project = await Project.findById(req.params._id);
   if (!project) return res.status(400).send("Project not found!");
 
@@ -77,7 +78,7 @@ router.put("/:_id/photo", [auth, isMongooseId], async (req, res) => {
   return res.status(200).send(project);
 });
 
-router.put("/:_id", [auth, isMongooseId], async (req, res) => {
+router.put("/:_id", [auth, admin, isMongooseId], async (req, res) => {
   const category = req.body.category;
   const stacks = req.body.stacks;
 
@@ -107,7 +108,7 @@ router.put("/:_id", [auth, isMongooseId], async (req, res) => {
   return res.status(200).send(project);
 });
 
-router.delete("/:_id", [auth, isMongooseId], async (req, res) => {
+router.delete("/:_id", [auth, admin, isMongooseId], async (req, res) => {
   const project = await Project.findById(req.params._id);
   if (!project) return res.status(400).send("project not found!");
   await project.remove();

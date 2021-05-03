@@ -3,13 +3,14 @@ const router = express.Router();
 const { ProjectCategory, validate } = require("../model/ProjectCategory");
 const auth = require("../middleware/auth");
 const isValidId = require("../middleware/isMongooseId");
+const admin = require("../middleware/admin");
 
 router.get("/", async (req, res) => {
   const categories = await ProjectCategory.find().sort({ id: 1 });
   return res.send(categories);
 });
 
-router.post("/", [auth], async (req, res) => {
+router.post("/", [auth, admin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -19,7 +20,7 @@ router.post("/", [auth], async (req, res) => {
   return res.status(200).send(category);
 });
 
-router.put("/:_id", [auth, isValidId], async (req, res) => {
+router.put("/:_id", [auth, admin, isValidId], async (req, res) => {
   const category = await ProjectCategory.findByIdAndUpdate(
     req.params._id,
     req.body,
@@ -30,7 +31,7 @@ router.put("/:_id", [auth, isValidId], async (req, res) => {
   return res.status(200).send(category);
 });
 
-router.delete("/:_id", [auth, isValidId], async (req, res) => {
+router.delete("/:_id", [auth, admin, isValidId], async (req, res) => {
   const category = await ProjectCategory.findById(req.params._id);
   if (!category) return res.status(400).send("already deleted!");
   await category.remove();

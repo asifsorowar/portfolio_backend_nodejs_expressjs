@@ -3,26 +3,34 @@ const Joi = require("@hapi/joi");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 8,
+    },
+    phone: {
+      type: String,
+      minlength: 11,
+    },
+    role: {
+      type: String,
+      required: true,
+      enum: ["user", "admin"],
+      default: "user",
+    },
   },
-  email: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-    minlength: 8,
-  },
-  phone: {
-    type: String,
-    minlength: 11,
-  },
-  created: { type: Date, default: Date.now },
-});
+  { timestamps: true }
+);
 
 userSchema.methods.getJwtToken = function () {
   const token = jwt.sign(
@@ -31,6 +39,7 @@ userSchema.methods.getJwtToken = function () {
       name: this.name,
       email: this.email,
       phone: this.phone,
+      role: this.role,
     },
     process.env.JWT_KEY,
     {
@@ -62,7 +71,7 @@ const validate = (user) => {
       .required()
       .min(11)
       .max(11)
-      .regex(/^[0-9]+$/)
+      .regex(/^(01)[0-9]{9}$/) //(?=expression)(?=expression) and operation // same: /^(01)[0-9]+$/
       .message("Invalid phone number format"),
     password: Joi.string().required().min(8),
   });

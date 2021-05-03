@@ -3,6 +3,7 @@ const path = require("path");
 const fs = require("fs");
 
 const auth = require("../middleware/auth");
+const admin = require("../middleware/admin");
 const router = express.Router();
 const { My_Info, validate } = require("../model/My_Info");
 
@@ -11,7 +12,7 @@ router.get("/", async (req, res) => {
   return res.send(my_info);
 });
 
-router.post("/", [auth], async (req, res) => {
+router.post("/", [auth, admin], async (req, res) => {
   let my_info = await My_Info.findOne();
   if (my_info) return res.status(400).send("Info already existed");
 
@@ -24,7 +25,7 @@ router.post("/", [auth], async (req, res) => {
   return res.status(200).send(my_info);
 });
 
-router.put("/", [auth], async (req, res, next) => {
+router.put("/", [auth, admin], async (req, res, next) => {
   const my_info = await My_Info.findOneAndUpdate({}, req.body, {
     new: true,
     runValidators: true,
@@ -32,7 +33,7 @@ router.put("/", [auth], async (req, res, next) => {
   return res.status(200).send(my_info);
 });
 
-router.put("/photo", auth, async (req, res) => {
+router.put("/photo", [auth, admin], async (req, res) => {
   if (!req.files) return res.status(400).send("Please upload an image!");
   const file = req.files.file;
   if (!file.mimetype.startsWith("image"))
@@ -62,7 +63,7 @@ router.put("/photo", auth, async (req, res) => {
   return res.status(200).send(my_info);
 });
 
-router.put("/cv", auth, async (req, res) => {
+router.put("/cv", [auth, admin], async (req, res) => {
   if (!req.files)
     return res.status(400).send("Please upload the resume as pdf format!");
   const file = req.files.file;

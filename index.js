@@ -22,11 +22,12 @@ const skills = require("./router/skills");
 const projectCategories = require("./router/projectCategories");
 const stacks = require("./router/stacks");
 const projects = require("./router/projects");
+const contacts = require("./router/contacts");
 
 app.use(express.json());
 app.use(express.static("public"));
 app.use(fileUpload());
-app.use("/api/user", users);
+app.use("/api/users", users);
 app.use("/api/auth", auth);
 app.use("/api/my_info", my_infos);
 app.use("/api/educations", educations);
@@ -37,6 +38,7 @@ app.use("/api/skills", skills);
 app.use("/api/categories", projectCategories);
 app.use("/api/stacks", stacks);
 app.use("/api/projects", projects);
+app.use("/api/contacts", contacts);
 app.use(error);
 
 mongoose

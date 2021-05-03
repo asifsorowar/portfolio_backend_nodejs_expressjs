@@ -3,6 +3,7 @@ const router = express.Router();
 const { Education, validate } = require("../model/Education");
 const auth = require("../middleware/auth");
 const mongooseId = require("../middleware/isMongooseId");
+const admin = require("../middleware/admin");
 
 router.get("/", async (req, res) => {
   const educations = await Education.find({}).sort({ id: -1 });
@@ -10,7 +11,7 @@ router.get("/", async (req, res) => {
   return res.status(200).send(educations);
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", [auth, admin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -26,7 +27,7 @@ router.post("/", auth, async (req, res) => {
   return res.status(200).send(education);
 });
 
-router.put("/:_id", [auth, mongooseId], async (req, res) => {
+router.put("/:_id", [auth, admin, mongooseId], async (req, res) => {
   const edu = await Education.findByIdAndUpdate(
     req.params._id,
     { ...req.body },
@@ -40,7 +41,7 @@ router.put("/:_id", [auth, mongooseId], async (req, res) => {
   return res.status(200).send(edu);
 });
 
-router.delete("/:_id", [auth, mongooseId], async (req, res) => {
+router.delete("/:_id", [auth, admin, mongooseId], async (req, res) => {
   const edu = await Education.findByIdAndDelete(req.params._id);
   if (!edu) return res.status(200).send("Already deleted!");
 
