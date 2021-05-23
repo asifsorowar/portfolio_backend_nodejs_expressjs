@@ -11,9 +11,11 @@ const { NAME, NODE_ENV, PORT } = process.env;
 
 const port = PORT || 5000;
 
-app.listen(port, () =>
+const server = app.listen(port, () =>
   console.log(
     `${NAME} - ${NODE_ENV}`.yellow.bold +
       ` is running on port ${port}.....`.green
   )
 );
+
+module.exports = server;

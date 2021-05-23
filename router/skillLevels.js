@@ -28,14 +28,14 @@ router.put("/:_id", [auth, admin, isValidId], async (req, res) => {
     new: true,
     runValidators: true,
   });
-  if (!level) return res.status(400).send("Not found!");
+  if (!level) return res.status(404).send("Not found!");
 
   return res.status(200).send(level);
 });
 
 router.delete("/:_id", [auth, admin, isValidId], async (req, res) => {
   const level = await SkillLevel.findByIdAndDelete(req.params._id);
-  if (!level) res.status(400).send("already deleted!");
+  if (!level) res.status(404).send("already deleted!");
 
   return res.status(200).send(level);
 });

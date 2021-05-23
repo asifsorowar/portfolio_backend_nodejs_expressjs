@@ -38,14 +38,14 @@ router.put("/:_id", [auth, admin, mongooseId], async (req, res) => {
       runValidators: true,
     }
   );
-  if (!employment) return res.status(400).send("institute not found!!");
+  if (!employment) return res.status(404).send("institute not found!!");
 
   return res.status(200).send(employment);
 });
 
 router.delete("/:_id", [auth, admin, mongooseId], async (req, res) => {
   const employment = await Employment.findByIdAndDelete(req.params._id);
-  if (!employment) return res.status(200).send("Already deleted!");
+  if (!employment) return res.status(404).send("Already deleted!");
 
   return res.status(200).send(employment);
 });

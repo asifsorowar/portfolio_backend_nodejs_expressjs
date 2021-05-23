@@ -37,7 +37,7 @@ module.exports = (app) => {
 
   app.use("/api/users", users);
   app.use("/api/auth", auth);
-  app.use("/api/my_info", my_infos);
+  app.use("/api/my_infos", my_infos);
   app.use("/api/educations", educations);
   app.use("/api/employments", employments);
   app.use("/api/skill_labels", skillLabels);

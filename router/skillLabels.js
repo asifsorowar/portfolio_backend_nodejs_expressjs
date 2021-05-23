@@ -28,14 +28,14 @@ router.put("/:_id", [auth, admin, isValidId], async (req, res) => {
     new: true,
     runValidators: true,
   });
-  if (!label) return res.status(400).send("Not found!");
+  if (!label) return res.status(404).send("Not found!");
 
   return res.status(200).send(label);
 });
 
 router.delete("/:_id", [auth, admin, isValidId], async (req, res) => {
   const label = await SkillLabel.findOne({ _id: req.params._id });
-  if (!label) return res.status(400).send("already deleted!");
+  if (!label) return res.status(404).send("already deleted!");
 
   await label.remove();
   return res.status(200).send(label);

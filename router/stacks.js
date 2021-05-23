@@ -28,17 +28,17 @@ router.put("/:_id", [auth, admin, isValidId], async (req, res) => {
     new: true,
     runValidators: true,
   });
-  if (!stack) return res.status(400).send("Not found!");
+  if (!stack) return res.status(404).send("Not found!");
 
   return res.status(200).send(stack);
 });
 
 router.delete("/:_id", [auth, admin, isValidId], async (req, res) => {
   const stack = await Stack.findById(req.params._id);
-  if (!stack) return res.status(400).send("already deleted!");
+  if (!stack) return res.status(404).send("already deleted!");
   await stack.remove();
 
-  return res.status(400).send(stack);
+  return res.status(200).send(stack);
 });
 
 module.exports = router;

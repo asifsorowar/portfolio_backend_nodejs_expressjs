@@ -37,7 +37,7 @@ router.put("/photo", [auth, admin], async (req, res) => {
   if (!req.files) return res.status(400).send("Please upload an image!");
   const file = req.files.file;
   if (!file.mimetype.startsWith("image"))
-    return res.status(200).send("Please upload an image!!");
+    return res.status(400).send("Please upload an image!!");
 
   if (file.size > process.env.PHOTO_SIZE)
     return res
@@ -71,7 +71,7 @@ router.put("/cv", [auth, admin], async (req, res) => {
     !file.mimetype.startsWith("application/pdf") &&
     !file.mimetype.startsWith("application/msword")
   )
-    return res.status(200).send("Please upload the resume as pdf format!");
+    return res.status(400).send("Please upload the resume as pdf format!");
 
   file.name = `resume${path.parse(file.name).ext}`;
   filePath = `${path.parse(__dirname).dir}${process.env.FILE_UPLOAD_PATH}/${
