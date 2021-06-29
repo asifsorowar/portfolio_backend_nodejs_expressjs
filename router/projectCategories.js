@@ -30,17 +30,17 @@ router.put("/:_id", [auth, admin, isValidId], async (req, res) => {
     req.body,
     { new: true, runValidators: true }
   );
-  if (!category) return res.status(400).send("Not found!");
+  if (!category) return res.status(404).send("Not found!");
 
   return res.status(200).send(category);
 });
 
 router.delete("/:_id", [auth, admin, isValidId], async (req, res) => {
   const category = await ProjectCategory.findById(req.params._id);
-  if (!category) return res.status(400).send("already deleted!");
+  if (!category) return res.status(404).send("already deleted!");
   await category.remove();
 
-  return res.status(400).send(category);
+  return res.status(200).send(category);
 });
 
 module.exports = router;

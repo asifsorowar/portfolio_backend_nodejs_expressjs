@@ -6,7 +6,7 @@ const categorySchema = new mongoose.Schema(
     id: {
       type: Number,
       required: true,
-      indexes: { unique: true },
+      index: { unique: true },
     },
     name: {
       type: String,
@@ -17,10 +17,10 @@ const categorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// categorySchema.pre("remove", async function (next) {
-//   await this.model("Project").deleteMany({ category: this._id });
-//   return next();
-// });
+categorySchema.pre("remove", async function (next) {
+  await this.model("Project").deleteMany({ category: this._id });
+  return next();
+});
 
 const ProjectCategory = mongoose.model("ProjectCategory", categorySchema);
 
